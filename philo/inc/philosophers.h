@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rnauke <rnauke@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: rnauke <rnauke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:35:31 by rnauke            #+#    #+#             */
-/*   Updated: 2023/04/15 16:40:47 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/04/15 19:16:37 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,18 @@
 
 typedef struct s_philo
 {
-	pthread_t	*
+	pthread_t	*philo;
+	int			sleep_td;
+	int			eat_td;
+	int			death;
 }	t_philo;
 
 typedef struct s_info
 {
-	pthread_t 		**pps;
+	t_philo			*pps;
 	pthread_mutex_t **utensils;
 	struct timeval	time;
+	int				time_delta;
 }	t_info;
 
 #endif
