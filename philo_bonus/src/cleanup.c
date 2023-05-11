@@ -3,40 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rnauke <rnauke@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: rnauke <rnauke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 11:46:34 by rnauke            #+#    #+#             */
-/*   Updated: 2023/05/10 21:41:28 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/05/11 19:42:02 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/philosophers.h"
+#include "../inc/philosophers_bonus.h"
 
 void	graveyard(t_philo **p, int tombs)
 {
-	while (tombs >= 0)
+	while (tombs > 0)
 	{
-		pthread_join(*p[tombs]->pt, p);
-		free(*p[tombs]->pt)
+		pthread_join(*p[tombs - 1]->pt, NULL);
+		free(p[tombs -1]->pt);
+		free(p[tombs -1]);
+		tombs--;
 	}
 	free(p);
 }
 
-void	dishwasher(pthread_mutex_t *cutlery, int amount)
+void	dishwasher(sem_t *cutlery, int amount)
 {
-	while (amount >= 0)
+	while (amount > 0)
 	{
-		pthread_mutex_unlock(&cutlery[amount]);
-		pthread_mutex_destroy(&cutlery[amount]);
-		free(cutlery[amount--]);
+		sem_post(cutlery);
+		sem_post(cutlery);
+		amount--;
 	}
-	free(cutlery);	
+	sem_unlink("wtfork");
+	sem_close(cutlery);
 }
 
 void	cleanup(t_info *info)
 {
-	graveyard(info->philo)
-	dishwasher(info->utensils);
+	dishwasher(info->utensils, info->num_philo);
+	graveyard(info->philo, info->num_philo);
+	sem_unlink("writing");
+	sem_close(info->writing);
 	free(info);
-	// exit(0);
 }

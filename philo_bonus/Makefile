@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rnauke <rnauke@student.42heilbronn.de>     +#+  +:+       +#+         #
+#    By: rnauke <rnauke@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/19 17:59:41 by rnauke            #+#    #+#              #
-#    Updated: 2023/05/10 17:27:21 by rnauke           ###   ########.fr        #
+#    Updated: 2023/05/11 18:07:39 by rnauke           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,13 +15,13 @@ NAME = philo_bonus
 OBJECTS_DIR = obj
 SOURCES_DIR = src
 
-SOURCES = main.c
+SOURCES = main.c cleanup.c utils.c philo.c
 OBJECTS = $(SOURCES:.c=.o)
 
 DIR_SRC = $(addprefix $(SOURCES_DIR)/, $(SOURCES))
 DIR_OBJ = $(addprefix $(OBJECTS_DIR)/, $(OBJECTS))
 
-FLAGS = -pthread -g #-Wall -Werror -Wextra
+FLAGS = -pthread -g -Wall -Werror -Wextra
 ARGS = $(FLAGS)
 all:  $(NAME)
 
