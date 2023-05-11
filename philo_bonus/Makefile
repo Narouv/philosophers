@@ -6,16 +6,16 @@
 #    By: rnauke <rnauke@student.42heilbronn.de>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/19 17:59:41 by rnauke            #+#    #+#              #
-#    Updated: 2023/05/10 22:14:48 by rnauke           ###   ########.fr        #
+#    Updated: 2023/05/10 17:27:21 by rnauke           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = philo
+NAME = philo_bonus
 
 OBJECTS_DIR = obj
 SOURCES_DIR = src
 
-SOURCES = main.c cleanup.c
+SOURCES = main.c
 OBJECTS = $(SOURCES:.c=.o)
 
 DIR_SRC = $(addprefix $(SOURCES_DIR)/, $(SOURCES))

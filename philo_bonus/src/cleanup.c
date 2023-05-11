@@ -6,7 +6,7 @@
 /*   By: rnauke <rnauke@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 11:46:34 by rnauke            #+#    #+#             */
-/*   Updated: 2023/05/10 22:24:07 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/05/10 21:41:28 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,29 @@
 
 void	graveyard(t_philo **p, int tombs)
 {
-	while (tombs > 0)
+	while (tombs >= 0)
 	{
-		pthread_join(*p[tombs - 1]->pt, NULL);
-		free(p[tombs-1]->pt);
-		free(p[tombs-1]);
-		tombs--;
+		pthread_join(*p[tombs]->pt, p);
+		free(*p[tombs]->pt)
 	}
 	free(p);
 }
 
 void	dishwasher(pthread_mutex_t *cutlery, int amount)
 {
-	while (amount > 0)
+	while (amount >= 0)
 	{
-		pthread_mutex_unlock(&cutlery[amount - 1]);
-		pthread_mutex_destroy(&cutlery[amount - 1]);
-		amount--;
+		pthread_mutex_unlock(&cutlery[amount]);
+		pthread_mutex_destroy(&cutlery[amount]);
+		free(cutlery[amount--]);
 	}
-	free(cutlery);
+	free(cutlery);	
 }
 
 void	cleanup(t_info *info)
 {
-	dishwasher(info->utensils, info->num_philo);
-	graveyard(info->philo, info->num_philo);
+	graveyard(info->philo)
+	dishwasher(info->utensils);
 	free(info);
+	// exit(0);
 }

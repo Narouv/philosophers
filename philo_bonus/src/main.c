@@ -6,11 +6,17 @@
 /*   By: rnauke <rnauke@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:34:19 by rnauke            #+#    #+#             */
-/*   Updated: 2023/05/10 22:52:48 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/05/09 23:33:47 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philosophers.h"
+
+void	cleanup(t_info *info)
+{
+	free(info);
+	exit(0);
+}
 
 int	ft_atoi(const char *str)
 {
@@ -239,6 +245,5 @@ int main(int argc, char **argv)
 			info->all_ate++;
 	}
 	cleanup(info);
-	system("leaks philo");
 	return (0);
 }
