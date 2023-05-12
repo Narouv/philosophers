@@ -6,7 +6,7 @@
 /*   By: rnauke <rnauke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 11:46:34 by rnauke            #+#    #+#             */
-/*   Updated: 2023/05/11 18:09:16 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/05/12 19:39:48 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	graveyard(t_philo **p, int tombs)
 	{
 		pthread_join(*p[tombs - 1]->pt, NULL);
 		free(p[tombs -1]->pt);
+		pthread_mutex_destroy(p[tombs -1]->eating);
+		free(p[tombs -1]->eating);
 		free(p[tombs -1]);
 		tombs--;
 	}

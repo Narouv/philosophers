@@ -6,7 +6,7 @@
 /*   By: rnauke <rnauke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:34:19 by rnauke            #+#    #+#             */
-/*   Updated: 2023/05/11 19:41:54 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/05/12 19:46:58 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ void	init_info(t_info *info, int argc, char **argv)
 	info->eat_num = -1;
 	if (argc == 6)
 		info->eat_num = ft_atoi(argv[5]);
-	info->stop = 0;
 	info->philo = malloc(sizeof(t_philo *) * info->num_philo);
 	set_table(info);
 	i = 0;
@@ -71,6 +70,7 @@ void	init_info(t_info *info, int argc, char **argv)
 		info->philo[i]->p_to_info = info;
 		info->philo[i]->n_eat = 0;
 		info->philo[i]->eat_ts = timestamp();
+		info->philo[i]->eating = malloc(sizeof(pthread_mutex_t));
 		i++;
 	}
 }
@@ -86,13 +86,11 @@ int	main(int argc, char **argv)
 	}
 	info = malloc(sizeof(t_info));
 	init_info(info, argc, argv);
+	info->stop = 0;
 	pthread_mutex_init(&info->writing, NULL);
 	assign_seats(info);
 	spawn_philosophers(info);
-	while (!info->stop)
-	{
-		check_stop(info);
-	}
+	check_stop(info);
 	cleanup(info);
 	return (0);
 }

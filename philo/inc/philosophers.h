@@ -6,7 +6,7 @@
 /*   By: rnauke <rnauke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:35:31 by rnauke            #+#    #+#             */
-/*   Updated: 2023/05/11 17:38:35 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/05/11 20:26:33 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_philo
 	unsigned long	eat_ts;
 	unsigned long	sleep_ts;
 	int				n_eat;
+	pthread_mutex_t	*eating;
 }	t_philo;
 
 typedef struct s_info

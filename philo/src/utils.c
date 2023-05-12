@@ -6,7 +6,7 @@
 /*   By: rnauke <rnauke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 15:23:31 by rnauke            #+#    #+#             */
-/*   Updated: 2023/05/11 17:22:05 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/05/11 20:35:10 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,6 @@ void	ft_msleep(t_info *info, unsigned long ms)
 	{
 		if (info->stop)
 			break ;
-		usleep(10);
+		usleep(50);
 	}
 }

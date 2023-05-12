@@ -6,7 +6,7 @@
 /*   By: rnauke <rnauke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 16:02:46 by rnauke            #+#    #+#             */
-/*   Updated: 2023/05/11 17:38:20 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/05/12 19:44:07 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,14 @@ void	eat(t_philo *p)
 	print(p, "has taken a fork\n");
 	pthread_mutex_lock(&info->utensils[p->fl]);
 	print(p, "has taken a fork\n");
-	p->eat_ts = timestamp();
 	print(p, "is eating\n");
+	pthread_mutex_lock(p->eating);
+	p->eat_ts = timestamp();
+	pthread_mutex_unlock(p->eating);
 	ft_msleep(info, info->eat_time);
 	p->n_eat++;
 	pthread_mutex_unlock(&info->utensils[p->fr]);
 	pthread_mutex_unlock(&info->utensils[p->fl]);
-}
-
-void	philo_sleep(t_philo *p)
-{
-	t_info	*info;
-
-	info = p->p_to_info;
-	print(p, "is sleeping\n");
-	ft_msleep(info, info->sleep_time);
-	print(p, "is thinking\n");
 }
 
 void	*philo_cycle(void *i)
@@ -51,7 +43,9 @@ void	*philo_cycle(void *i)
 	while (!info->stop)
 	{
 		eat(p);
-		philo_sleep(p);
+		print(p, "is sleeping\n");
+		ft_msleep(info, info->sleep_time);
+		print(p, "is thinking\n");
 	}
 	return (p);
 }
@@ -60,25 +54,29 @@ void	check_stop(t_info *info)
 {
 	int	i;
 
-	i = 0;
-	while (i < info->num_philo)
+	while (!info->stop)
 	{
-		if (timestamp() - info->philo[i]->eat_ts > info->die_time)
+		i = 0;
+		while (i < info->num_philo)
 		{
+			pthread_mutex_lock(info->philo[i]->eating);
 			if (timestamp() - info->philo[i]->eat_ts > info->die_time)
 			{
-				print(info->philo[i], "died\n");
 				info->stop = 1;
+				printf("%lu %i died\n", timestamp() - info->starttime, info->philo[i]->pn);
+				break ;
 			}
+			pthread_mutex_unlock(info->philo[i]->eating);
+			i++;
+			usleep(100);
 		}
+		i = 0;
+		while (info->eat_num != -1 && i < info->num_philo
+			&& info->philo[i]->n_eat >= info->eat_num)
+			i++;
+		if (i == info->num_philo)
+			info->all_ate++;
 		if (info->eat_num > 0 && info->all_ate >= info->eat_num)
 			info->stop = 1;
-		i++;
 	}
-	i = 0;
-	while (info->eat_num != -1 && i < info->num_philo
-		&& info->philo[i]->n_eat >= info->eat_num)
-		i++;
-	if (i == info->num_philo)
-		info->all_ate++;
 }
