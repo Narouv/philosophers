@@ -6,7 +6,7 @@
 /*   By: rnauke <rnauke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 16:02:46 by rnauke            #+#    #+#             */
-/*   Updated: 2023/05/12 19:07:43 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/05/13 21:05:32 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ void	eat(t_philo *p)
 	print(p, "has taken a fork\n");
 	sem_wait(info->utensils);
 	print(p, "has taken a fork\n");
+	sem_wait(info->eating);
 	p->eat_ts = timestamp();
+	sem_post(info->eating);
 	print(p, "is eating\n");
 	ft_msleep(info, info->eat_time);
 	p->n_eat++;
@@ -39,13 +41,15 @@ void	philo_sleep(t_philo *p)
 	print(p, "is thinking\n");
 }
 
-void	*philo_cycle(void *i)
+void	philo_cycle(void *ptp)
 {
 	t_philo	*p;
 	t_info	*info;
 
-	p = (t_philo *)i;
+	p = (t_philo *)ptp;
 	info = p->p_to_info;
+	p->eat_ts = timestamp();
+	pthread_create(&p->tid, NULL, check_stop, p);
 	if (p->pn % 2 == 0)
 		ft_msleep(info, info->eat_time);
 	while (!info->stop)
@@ -53,32 +57,31 @@ void	*philo_cycle(void *i)
 		eat(p);
 		philo_sleep(p);
 	}
-	return (p);
+	pthread_join(p->tid, NULL);
+	exit(0);
 }
 
-void	check_stop(t_info *info)
+void	*check_stop(void *ptp)
 {
-	int	i;
+	t_philo	*philo;
+	t_info	*info;
 
-	i = 0;
-	while (i < info->num_philo)
+	philo = (t_philo *)ptp;
+	info = philo->p_to_info;
+	while (!info->stop)
 	{
-		if (timestamp() - info->philo[i]->eat_ts > info->die_time)
+		sem_wait(info->eating);
+		if (timestamp() - philo->eat_ts > info->die_time)
 		{
-			if (timestamp() - info->philo[i]->eat_ts > info->die_time)
-			{
-				print(info->philo[i], "died\n");
-				info->stop = 1;
-			}
-		}
-		if (info->eat_num > 0 && info->all_ate >= info->eat_num)
 			info->stop = 1;
-		i++;
+			printf("%lu %i died\n", timestamp() - info->starttime, philo->pn);
+		}
+		sem_post(info->eating);
+		if (info->stop)
+			break ;
+		usleep(500);
+		if (philo->n_eat >= info->eat_num)
+			info->stop = 1;
 	}
-	i = 0;
-	while (info->eat_num != -1 && i < info->num_philo
-		&& info->philo[i]->n_eat >= info->eat_num)
-		i++;
-	if (i == info->num_philo)
-		info->all_ate++;
+	return NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: rnauke <rnauke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:34:19 by rnauke            #+#    #+#             */
-/*   Updated: 2023/05/11 19:41:24 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/05/13 21:03:59 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,19 @@
 
 void	spawn_philosophers(t_info *info)
 {
-	int	i;
+	int		i;
+	pid_t	ret;
 
 	i = 0;
 	while (i < info->num_philo)
 	{
-		pthread_create(info->philo[i]->pt, NULL, philo_cycle, info->philo[i]);
+		ret = fork();
+		if (ret == -1)
+			return ;
+		if (!ret)
+			philo_cycle(info->philo[i]);
+		else
+			info->philo[i]->pt = ret;
 		i++;
 	}
 }
@@ -27,7 +34,9 @@ void	spawn_philosophers(t_info *info)
 void	set_table(t_info *info)
 {
 	sem_unlink("wtfork");
+	sem_unlink("eating");
 	info->utensils = sem_open("wtfork", O_CREAT, S_IRWXU, info->num_philo);
+	info->eating = sem_open("eating", O_CREAT, S_IRWXU, 1);
 }
 
 void	assign_seats(t_info *info)
@@ -62,11 +71,9 @@ void	init_info(t_info *info, int argc, char **argv)
 	while (i < info->num_philo)
 	{
 		info->philo[i] = malloc(sizeof(t_philo));
-		info->philo[i]->pt = malloc(sizeof(pthread_t));
 		info->philo[i]->pn = i + 1;
 		info->philo[i]->p_to_info = info;
 		info->philo[i]->n_eat = 0;
-		info->philo[i]->eat_ts = timestamp();
 		i++;
 	}
 }
@@ -86,10 +93,8 @@ int	main(int argc, char **argv)
 	info->writing = sem_open("writing", O_CREAT, S_IRWXU, 1);
 	assign_seats(info);
 	spawn_philosophers(info);
-	while (!info->stop)
-	{
-		check_stop(info);
-	}
-	cleanup(info);
+	while (1)
+		if (info->stop)
+			cleanup(info);
 	return (0);
 }
