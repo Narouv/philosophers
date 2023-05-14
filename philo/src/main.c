@@ -6,7 +6,7 @@
 /*   By: rnauke <rnauke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:34:19 by rnauke            #+#    #+#             */
-/*   Updated: 2023/05/12 19:46:58 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/05/14 20:38:32 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	init_info(t_info *info, int argc, char **argv)
 {
 	int	i;
 
-	info->starttime = timestamp();
+	info->st = timestamp();
 	info->num_philo = ft_atoi(argv[1]);
 	info->die_time = ft_atoi(argv[2]);
 	info->eat_time = ft_atoi(argv[3]);
