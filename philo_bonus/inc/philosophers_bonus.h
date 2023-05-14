@@ -6,7 +6,7 @@
 /*   By: rnauke <rnauke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:35:31 by rnauke            #+#    #+#             */
-/*   Updated: 2023/05/13 20:40:17 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/05/14 18:25:34 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <signal.h>
 # include <sys/time.h>
 
 struct	s_info;

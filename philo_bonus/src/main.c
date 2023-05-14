@@ -6,7 +6,7 @@
 /*   By: rnauke <rnauke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:34:19 by rnauke            #+#    #+#             */
-/*   Updated: 2023/05/13 21:03:59 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/05/14 17:54:37 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,6 @@ int	main(int argc, char **argv)
 	info->writing = sem_open("writing", O_CREAT, S_IRWXU, 1);
 	assign_seats(info);
 	spawn_philosophers(info);
-	while (1)
-		if (info->stop)
-			cleanup(info);
+	cleanup(info);
 	return (0);
 }

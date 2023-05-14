@@ -6,7 +6,7 @@
 /*   By: rnauke <rnauke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 15:23:31 by rnauke            #+#    #+#             */
-/*   Updated: 2023/05/11 20:35:10 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/05/14 20:15:23 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	print(t_philo *p, char *str)
 
 	info = p->p_to_info;
 	pthread_mutex_lock(&info->writing);
-	time = info->starttime;
+	time = info->st;
 	if (!info->stop)
 		printf("%lu %i %s", timestamp() - time, p->pn, str);
 	pthread_mutex_unlock(&info->writing);

@@ -6,7 +6,7 @@
 /*   By: rnauke <rnauke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 16:02:46 by rnauke            #+#    #+#             */
-/*   Updated: 2023/05/13 21:05:32 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/05/14 20:11:10 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void	philo_cycle(void *ptp)
 	while (!info->stop)
 	{
 		eat(p);
+		if (p->n_eat >= info->eat_num && info->eat_num != -1)
+			break ;
 		philo_sleep(p);
 	}
 	pthread_join(p->tid, NULL);
@@ -70,6 +72,7 @@ void	*check_stop(void *ptp)
 	info = philo->p_to_info;
 	while (!info->stop)
 	{
+		usleep(500);
 		sem_wait(info->eating);
 		if (timestamp() - philo->eat_ts > info->die_time)
 		{
@@ -79,9 +82,8 @@ void	*check_stop(void *ptp)
 		sem_post(info->eating);
 		if (info->stop)
 			break ;
-		usleep(500);
-		if (philo->n_eat >= info->eat_num)
-			info->stop = 1;
+		if (philo->n_eat >= info->eat_num && info->eat_num != -1)
+			break ;
 	}
-	return NULL;
+	return (NULL);
 }

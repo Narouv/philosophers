@@ -6,7 +6,7 @@
 /*   By: rnauke <rnauke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:35:31 by rnauke            #+#    #+#             */
-/*   Updated: 2023/05/11 20:26:33 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/05/14 20:15:33 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_info
 {
 	t_philo			**philo;
 	pthread_mutex_t	*utensils;
-	unsigned long	starttime;
+	unsigned long	st;
 	unsigned long	elapsed;
 	pthread_mutex_t	writing;
 	int				num_philo;

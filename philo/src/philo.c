@@ -6,7 +6,7 @@
 /*   By: rnauke <rnauke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 16:02:46 by rnauke            #+#    #+#             */
-/*   Updated: 2023/05/12 19:44:07 by rnauke           ###   ########.fr       */
+/*   Updated: 2023/05/14 20:20:51 by rnauke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,13 @@ void	*philo_cycle(void *i)
 	return (p);
 }
 
+int	died(t_info *in, int i)
+{
+	in->stop = 1;
+	printf("%lu %i died\n", timestamp() - in->st, in->philo[i]->pn);
+	return (1);
+}
+
 void	check_stop(t_info *info)
 {
 	int	i;
@@ -61,11 +68,8 @@ void	check_stop(t_info *info)
 		{
 			pthread_mutex_lock(info->philo[i]->eating);
 			if (timestamp() - info->philo[i]->eat_ts > info->die_time)
-			{
-				info->stop = 1;
-				printf("%lu %i died\n", timestamp() - info->starttime, info->philo[i]->pn);
-				break ;
-			}
+				if (died(info, i))
+					break ;
 			pthread_mutex_unlock(info->philo[i]->eating);
 			i++;
 			usleep(100);
